@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="grid cards">
+  <div class="card metric"><span>Total priority sites</span><strong>{{ kpi_count }}</strong></div>
+  <div class="card metric"><span>Alarm average table</span><strong>{{ averages_count }}</strong></div>
+  <div class="card metric"><span>Prediction rows</span><strong>{{ predictions|length }}</strong></div>
+</section>
+
+<section class="grid two-cols">
+  <div class="card">
+    <h2>Import New KPI Data</h2>
+    <p class="muted">CSV/Excel columns: Start Time, Period (min), Site Name, Data Traffic Volume (MB), Voice Traffic Volume (Erl)</p>
+    <form action="/upload/kpi" method="post" enctype="multipart/form-data" class="inline-form">
+      <input type="file" name="file" accept=".csv,.xlsx,.xls" required />
+      <button type="submit">Import KPI</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Import New Power Alarm Data</h2>
+    <p class="muted">CSV/Excel columns: Incident ID, Site Name, Region, Event Date, Alarm Sequence, Alarm Name, Occurred On, Cleared On, Alarm Duration (min)</p>
+    <form action="/upload/alarm" method="post" enctype="multipart/form-data" class="inline-form">
+      <input type="file" name="file" accept=".csv,.xlsx,.xls" required />
+      <button type="submit">Import Alarms & Predict</button>
+    </form>
+  </div>
+</section>
+
+<section class="card">
+  <div class="section-head">
+    <div>
+      <h2>Top 20 Dynamic Revenue Priority List</h2>
+      <p class="muted">Green = Normal, Yellow = Power failure, Orange = DC low alarm, Red = Site down alarm</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Rank</th><th>Site</th><th>Region</th><th>Hour</th><th>Data Revenue/hr</th><th>Voice Revenue/hr</th><th>Total Revenue/hr</th><th>Alarm State</th><th>Last Alarm</th></tr></thead>
+      <tbody>
+      {% for row in top_rows %}
+        <tr class="state-{{ row.state_class }}"><td>{{ row.rank }}</td><td><strong>{{ row.display_name }}</strong><br><small>{{ row.site_name }}</small></td><td>{{ row.region }}</td><td>{{ row.hour }}:00</td><td>Rs. {{ "{:,.2f}".format(row.data_revenue) }}</td><td>Rs. {{ "{:,.2f}".format(row.voice_revenue) }}</td><td><strong>Rs. {{ "{:,.2f}".format(row.total_revenue) }}</strong></td><td>{{ row.alarm_state }}</td><td>{{ row.last_alarm_time }}</td></tr>
+      {% else %}
+        <tr><td colspan="9" class="empty">No KPI data imported. Run scripts/seed_demo_data.py first.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card">
+  <div class="section-head">
+    <div>
+      <h2>Prediction and Revenue Loss Table</h2>
+      <p class="muted">Generated after importing a new power alarm file.</p>
+    </div>
+    <a class="button secondary" href="/export/predictions.csv">Export CSV</a>
+  </div>
+  <div class="table-wrap wide">
+    <table>
+      <thead><tr><th>Site</th><th>Region</th><th>Alarm</th><th>Event Time</th><th>Mains→DC</th><th>DC→Down</th><th>Down Duration</th><th>Data Loss 1h</th><th>Voice Loss 1h</th><th>Total Loss 4h</th><th>Score</th></tr></thead>
+      <tbody>
+      {% for r in predictions %}
+        <tr><td>{{ r.site_name }}</td><td>{{ r.region }}</td><td>{{ r.alarm_state }}</td><td>{{ r.event_time }}</td><td>{{ r.mains_to_dc }} min</td><td>{{ r.dc_to_down }} min</td><td>{{ r.site_down }} min</td><td>Rs. {{ "{:,.2f}".format(r.data_loss_1h) }}</td><td>Rs. {{ "{:,.2f}".format(r.voice_loss_1h) }}</td><td><strong>Rs. {{ "{:,.2f}".format(r.total_loss_4h) }}</strong></td><td>{{ r.priority_score }}</td></tr>
+      {% else %}
+        <tr><td colspan="11" class="empty">No prediction results yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="grid two-cols">
+  <div class="card chat-card">
+    <h2>AI Assistant Chat</h2>
+    <p class="muted">Ask questions such as: “We have two generators for Hunumulla, Maradagahamula and Kurana4. Give priority order.”</p>
+    <form id="chatForm" class="chat-form">
+      <textarea name="prompt" rows="5" placeholder="Type your operational question..." required></textarea>
+      <button type="submit">Ask Assistant</button>
+    </form>
+    <pre id="chatAnswer" class="chat-answer">Assistant response will appear here.</pre>
+  </div>
+  <div class="card">
+    <h2>Recent Imports</h2>
+    <ul class="imports">
+      {% for item in last_imports %}
+        <li><strong>{{ item.import_type }}</strong> · {{ item.row_count }} rows · {{ item.file_name }}<br><small>{{ item.created_at }}</small></li>
+      {% else %}
+        <li>No imports yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}

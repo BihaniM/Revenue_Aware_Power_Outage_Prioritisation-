@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h2>User Administration</h2>
+  <form action="/admin/users/create" method="post" class="inline-form">
+    <input type="text" name="username" placeholder="new username" required />
+    <select name="role"><option value="common">common</option><option value="admin">admin</option></select>
+    <button type="submit">Create User</button>
+  </form>
+  <div class="table-wrap">
+    <table><thead><tr><th>ID</th><th>Username</th><th>Role</th><th>Plain Password</th><th>Actions</th></tr></thead><tbody>
+      {% for u in users %}
+      <tr>
+        <td>{{ u.id }}</td><td>{{ u.username }}</td><td>{{ u.role }}</td>
+        <td>
+          <form action="/admin/users/update" method="post" class="inline-form compact">
+            <input type="hidden" name="user_id" value="{{ u.id }}" />
+            <input type="text" name="password" value="{{ u.password_plain }}" />
+            <select name="role"><option value="common" {% if u.role=='common' %}selected{% endif %}>common</option><option value="admin" {% if u.role=='admin' %}selected{% endif %}>admin</option></select>
+            <button type="submit">Update</button>
+          </form>
+        </td>
+        <td><form action="/admin/users/delete" method="post"><input type="hidden" name="user_id" value="{{ u.id }}" /><button class="danger" type="submit">Delete</button></form></td>
+      </tr>
+      {% endfor %}
+    </tbody></table>
+  </div>
+</section>
+<section class="card">
+  <h2>Import Logs</h2>
+  <div class="table-wrap">
+    <table><thead><tr><th>Time</th><th>Type</th><th>File</th><th>Rows</th><th>Message</th></tr></thead><tbody>
+      {% for log in imports %}<tr><td>{{ log.created_at }}</td><td>{{ log.import_type }}</td><td>{{ log.file_name }}</td><td>{{ log.row_count }}</td><td>{{ log.message }}</td></tr>{% endfor %}
+    </tbody></table>
+  </div>
+</section>
+{% endblock %}

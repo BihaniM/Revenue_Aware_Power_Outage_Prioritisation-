@@ -1,0 +1,61 @@
+:root {
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --text: #172033;
+  --muted: #65758b;
+  --primary: #0f766e;
+  --primary-dark: #115e59;
+  --border: #dce5ef;
+  --green: #d9f99d;
+  --yellow: #fef08a;
+  --orange: #fed7aa;
+  --red: #fecaca;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, Segoe UI, Arial, sans-serif; background: var(--bg); color: var(--text); }
+.topbar { background: linear-gradient(135deg, #064e3b, #0f766e); color: white; padding: 22px 36px; display: flex; justify-content: space-between; gap: 24px; align-items: center; box-shadow: 0 8px 30px rgba(15, 23, 42, .14); }
+.topbar h1 { margin: 0 0 6px; font-size: 26px; }
+.topbar p { margin: 0; opacity: .88; }
+.topbar nav { display: flex; gap: 14px; flex-wrap: wrap; }
+.topbar nav a { color: white; text-decoration: none; background: rgba(255,255,255,.13); padding: 9px 14px; border-radius: 999px; }
+.container { max-width: 1440px; margin: 24px auto; padding: 0 24px 60px; }
+.footer { text-align: center; padding: 18px; color: var(--muted); font-size: 13px; }
+.grid { display: grid; gap: 18px; }
+.cards { grid-template-columns: repeat(3, minmax(180px, 1fr)); }
+.two-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 18px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 20px; box-shadow: 0 12px 40px rgba(15, 23, 42, .06); margin-bottom: 18px; }
+.metric span { color: var(--muted); font-size: 14px; }
+.metric strong { display: block; margin-top: 10px; font-size: 34px; color: var(--primary-dark); }
+h2 { margin: 0 0 10px; font-size: 20px; }
+.muted { color: var(--muted); font-size: 14px; line-height: 1.5; }
+.section-head { display: flex; justify-content: space-between; gap: 18px; align-items: center; margin-bottom: 10px; }
+.inline-form { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.inline-form.compact { gap: 8px; }
+.stacked-form { display: grid; gap: 14px; }
+label { display: grid; gap: 6px; font-weight: 600; }
+input, select, textarea { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; font: inherit; background: white; }
+textarea { width: 100%; resize: vertical; }
+button, .button { border: 0; background: var(--primary); color: white; padding: 10px 16px; border-radius: 12px; cursor: pointer; font-weight: 700; text-decoration: none; display: inline-block; }
+button:hover, .button:hover { background: var(--primary-dark); }
+button.danger { background: #dc2626; }
+.button.secondary { background: #334155; }
+.login-wrap { display: grid; place-items: center; min-height: 58vh; }
+.login-card { width: min(430px, 100%); background: white; padding: 28px; border-radius: 26px; box-shadow: 0 16px 50px rgba(15,23,42,.12); }
+.alert { padding: 10px 12px; border-radius: 12px; margin: 10px 0; }
+.alert.error { background: #fee2e2; color: #991b1b; }
+.table-wrap { width: 100%; overflow-x: auto; border-radius: 16px; border: 1px solid var(--border); }
+table { border-collapse: collapse; width: 100%; background: white; }
+th, td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; font-size: 14px; }
+th { background: #f8fafc; color: #334155; font-size: 13px; text-transform: uppercase; letter-spacing: .03em; }
+td small { color: var(--muted); }
+.empty { text-align: center; color: var(--muted); padding: 26px; }
+.state-normal { background: linear-gradient(90deg, rgba(217,249,157,.55), white 40%); }
+.state-power-failure { background: linear-gradient(90deg, rgba(254,240,138,.75), white 45%); }
+.state-dc-low-alarm { background: linear-gradient(90deg, rgba(254,215,170,.85), white 45%); }
+.state-site-down-alarm { background: linear-gradient(90deg, rgba(254,202,202,.9), white 45%); }
+.chat-answer { min-height: 190px; white-space: pre-wrap; background: #0f172a; color: #d1fae5; border-radius: 16px; padding: 16px; overflow: auto; }
+.imports { padding-left: 18px; }
+.imports li { margin-bottom: 12px; }
+@media (max-width: 900px) { .topbar, .section-head { flex-direction: column; align-items: flex-start; } .cards, .two-cols { grid-template-columns: 1fr; } }
+.footer strong { font-weight: 700; }
+.footer span { margin: 0 6px; opacity: 0.75; }

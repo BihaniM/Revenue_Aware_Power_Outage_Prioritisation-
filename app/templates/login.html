@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="login-wrap">
+  <div class="login-card">
+    <h2>Secure Login</h2>
+    <p class="muted">Default admin: <strong>admin</strong> / <strong>admin</strong></p>
+    {% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+    <form action="/login" method="post" class="stacked-form">
+      <label>Username<input type="text" name="username" required autofocus /></label>
+      <label>Password<input type="password" name="password" required /></label>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

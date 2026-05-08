@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ app_name }}</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>{{ app_name }}</h1>
+      <p>Revenue-aware corrective maintenance prioritization for mobile base-station power failures</p>
+    </div>
+    {% if user %}
+    <nav>
+      <a href="/">Dashboard</a>
+      {% if user.role == 'admin' %}<a href="/admin">Admin</a>{% endif %}
+      <a href="/logout">Logout</a>
+    </nav>
+    {% endif %}
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer">
+    <strong>Deployable Version:</strong> {{ app_version }}
+    <span>·</span> <strong>Patch:</strong> {{ app_patch }}
+    <span>·</span> <strong>Build:</strong> {{ app_build }}
+    <span>·</span> <strong>Target:</strong> {{ app_deployment_target }}
+    <br />Developed for MSc Data Science project demonstration · Plain-text passwords are used only because the assignment requirement requested it.
+  </footer>
+</body>
+</html>
